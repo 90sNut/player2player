@@ -1,4 +1,4 @@
-package br.com.ninetysnut.playertoplayer;
+package org.ninetysnut.playertoplayer;
 
 import java.io.File;
 import java.util.logging.Logger;

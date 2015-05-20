@@ -1,4 +1,4 @@
-package br.com.ninetysnut.playertoplayer;
+package org.ninetysnut.playertoplayer;
 
 import javax.sound.sampled.AudioFormat;
 
