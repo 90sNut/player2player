@@ -1,7 +1,10 @@
 package org.ninetysnut.playertoplayer;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFormat;
@@ -16,29 +19,34 @@ public class AudioPlayer {
 	private static final Logger log = Logger.getAnonymousLogger();
 
 	private final SourceDataLine sourceDataLine;
-	private final AudioInputStream audioInputStream;
+	private final InputStream inputStream;
 	private final int bufferSize;
 
 	public AudioPlayer(SourceDataLine sourceDataLine,
-			AudioInputStream audioInputStream, int bufferSize) {
+			InputStream inputStream, int bufferSize) {
 		this.sourceDataLine = sourceDataLine;
-		this.audioInputStream = audioInputStream;
+		this.inputStream = inputStream;
 		this.bufferSize = bufferSize;
 	}
 
 	public static AudioPlayer build(File fileToPlay, int bufferSize) {
 
-		AudioInputStream audioInputStream = null;
+		InputStream inputStream = null;
 
 		try {
-			audioInputStream = AudioSystem.getAudioInputStream(fileToPlay);
+			inputStream = new BufferedInputStream(new FileInputStream(fileToPlay));
 		} catch (Exception e) {
 			log.info("Não foi possível pegar o AudioInputStream do arquivo " + fileToPlay.getPath());
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
+		return build(inputStream, bufferSize);
+	}
 
-		AudioFormat audioFormat = audioInputStream.getFormat();
+	public static AudioPlayer build(InputStream inputStream, int bufferSize) {
+
+		AudioFormat audioFormat = Utils.getMonoAudioFormat();
 
 		SourceDataLine sourceDataLine = null;
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class,
@@ -51,7 +59,7 @@ public class AudioPlayer {
 			System.exit(1);
 		}
 
-		AudioPlayer player = new AudioPlayer(sourceDataLine, audioInputStream,
+		AudioPlayer player = new AudioPlayer(sourceDataLine, inputStream,
 				bufferSize);
 
 		return player;
@@ -63,8 +71,9 @@ public class AudioPlayer {
 	 * is written according to the desired audio file type. Reading continues
 	 * until TargetDataLine is stopped or closed. Then, the file is closed and
 	 * 'AudioSystem.write()' returns.
+	 * @throws IOException 
 	 */
-	public void startPlayback() {
+	public void startPlayback() throws IOException {
 		
 		sourceDataLine.start();
 		log.info("SourceDataLine started");
@@ -73,9 +82,9 @@ public class AudioPlayer {
 		byte[] abData = new byte[bufferSize];
 		
 		log.info("Playing...");
-		while (nBytesRead != -1) {
+		while (inputStream.available() > 0 && nBytesRead != -1) {
 			try {
-				nBytesRead = audioInputStream.read(abData, 0, abData.length);
+				nBytesRead = inputStream.read(abData, 0, abData.length);
 			} catch (IOException e) {
 				log.info(e.getMessage());
 				e.printStackTrace();
