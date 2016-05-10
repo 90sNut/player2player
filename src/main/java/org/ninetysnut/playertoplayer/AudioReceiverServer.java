@@ -14,12 +14,13 @@ public class AudioReceiverServer {
 	
 	public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		
-		ServerSocket server = new ServerSocket(6666);
+		ServerSocket server = new ServerSocket(0);
 		
 		System.out.println(server.getInetAddress().getHostAddress());
 		System.out.println(server.getInetAddress().getHostName());
 		
 		System.out.println(server.getLocalPort());
+		System.out.println(server.getLocalSocketAddress());
 		
 		Socket accept = server.accept();
 		

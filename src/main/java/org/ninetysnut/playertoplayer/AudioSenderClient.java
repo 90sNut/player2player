@@ -24,20 +24,20 @@ class AudioSenderClient {
 //	private static String hostRemoto = "179.153.81.244"; //mustache
 //	private static String hostRemoto = "b39951f4.virtua.com.br"; //mustache
 //	private static String hostRemoto = "186.203.15.27"; //?
-	private static String hostRemoto = "179.34.58.234"; //?
+//	private static String hostRemoto = "179.34.58.234"; //?
+	private static String hostRemoto = "179.34.205.253"; //?
 	
 	
 //	private static int port = 17964;
 //	private static String hostRemoto = "192.168.1.111"; //mustache lan
-	private static int port = 6666;
+	private static int port = 59430;
 	
 	public static void main(String args[]) throws IOException {
 
 		InetAddress ipRemoto = InetAddress.getByName(hostRemoto);
 
 		log.info("Tentando conectar Socket...");
-		Socket clientSocket = new Socket(ipRemoto, port, null, 0);
-		log.info("Conectado!");
+		Socket clientSocket = new Socket(ipRemoto, port);
 
 		log.info("Iniciando tranferencia de " + SOUND_FILE);
 		OutputStream outputStream = clientSocket.getOutputStream();

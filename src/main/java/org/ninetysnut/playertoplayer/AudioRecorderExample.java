@@ -13,8 +13,8 @@ public class AudioRecorderExample {
 	public static void main(String[] args) throws InterruptedException {
 
 		AudioFormat audioFormat = Utils.getMonoAudioFormat();
-		AudioFileFormat.Type audioFileFormatType = AudioFileFormat.Type.WAVE;
-		File outputFile = new File("c:\\tmp\\audio.wav");
+		AudioFileFormat.Type audioFileFormatType = AudioFileFormat.Type.AU;
+		File outputFile = new File("c:\\tmp\\audio222.wav");
 
 		log.info("Trying to set things up to start recording audio...");
 		AudioRecorder recorder = AudioRecorder.build(audioFormat,
@@ -23,7 +23,7 @@ public class AudioRecorderExample {
 		recorder.start();
 		log.info("Recording...");
 
-		Thread.sleep(5000);
+		Thread.sleep(30000);
 
 		recorder.stopRecording();
 		log.info("Recording stopped.");
